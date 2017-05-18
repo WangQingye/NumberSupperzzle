@@ -43,5 +43,6 @@ class TimerHandler
         this.methodObj = null;
         this.completeMethod = null;
         this.completeMethodObj = null;
+        console.log('清理时间管理');
     }
 }
