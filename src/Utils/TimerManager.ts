@@ -79,6 +79,7 @@ class TimerManager
         //参数监测
         if(delay < 0 || repeatCount < 0 || method == null)
         {
+            console.log('test');
             return;
         }
     }
