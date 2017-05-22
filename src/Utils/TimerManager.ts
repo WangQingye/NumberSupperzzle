@@ -82,6 +82,100 @@ class TimerManager
             console.log('test1');
             return;
         }
+
+        //先删除相同的函数的计时
+        this.remove(method,methodObj);
+
+        //创建
+        let handler: TimerHandler = ObjectPool.pop("TimerHandler");
+        handler.userFrame = userFrame;
+        handler.repeat = repeatCount == 0;
+        handler.repeatCount = repeatCount;
+        handler.delay = delay;
+        handler.method = method;
+        handler.methodObj = methodObj;
+        handler.completeMethod = completeMethod;
+        handler.completeMethodObj = completeMethodObj;
+        handler.exeTime = delay + (useFrame ? this._currFrame : this._currTime);
+        handler.lastTime = this._currTime;
+        this._handlers.push(handler);
+        this._count++;
+    }
+
+    /**时间定时执行
+     * @param delay 执行间隔：毫秒
+     * @param repeatCount 执行次数，0为无限次
+     * @param method 执行函数
+     * @param methodObj 执行函数对象
+     * @param completeMethod 完成时的回调函数
+     * @param completeMethodObj 回调函数所属对象
+     * 
+    */
+
+    public static doTimer(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
+    {
+        this.create(false, delay, repeatCount, method, methodObj, completeMethod, completeMethodObj);
+    }
+
+    /**帧数定时执行
+     * @param delay 执行间隔：毫秒
+    */
+
+    public static doFrame(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
+    {
+        this.create(true, delay, repeatCount, method, methodObj, completeMethod, completeMethodObj);
+    }
+
+    /**定时器数量*/
+    public static get count():number
+    {
+        return this._count;
+    }
+
+    /**清理某个方法的定时器*/
+    public static remove(method:Function, methodObj:any):void
+    {
+        for (let i = 0; i < this.count; i++) 
+        {
+            let handler: TimerHandler = this._handlers[i];
+            if(handler.methodObj == methodObj && handler.method == method)
+            {
+                this._handlers.splice(i,1);
+                ObjectPool.push(handler);
+                this._count--;
+                i--;
+            }
+        }
+    }
+
+    /**清理某个对象的定时器*/
+    public static removeAll(methodObj:any):void
+    {
+        for (let i = 0; i < this.count; i++) 
+        {
+            let handler: TimerHandler = this._handlers[i];
+            if(handler.methodObj == methodObj)
+            {
+                this._handlers.splice(i,1);
+                ObjectPool.push(handler);
+                this._count--;
+                i--;
+            }
+        }
+    }
+
+    /**检测是否已经存在*/
+    public static isExists(method:Function, methodObj:any):boolean
+    {
+        for( let i = 0; i < this._count; i++)
+        {
+            let handler:TimerHandler = this._handlers[i];
+            if(handler.method == method && handler.methodObj == methodObj)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
