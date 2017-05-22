@@ -36,7 +36,7 @@ class BaseScene extends egret.DisplayObjectContainer
     /**退出释放*/
     public dispos()
     {
-        TimerManeger.remove(this.update, this);
+        TimerManager.remove(this.update, this);
         DisplayUitls.removeFromParent(this);
     }
 }

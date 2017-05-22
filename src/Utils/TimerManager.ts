@@ -41,7 +41,7 @@ class TimerManager
         for(let i = 0; i < this._count; i++)
         {
             let handler:TimerHandler = this._handlers[i];
-            let t:number = handler.userFrame ? this._currFrame : this._currTime;
+            let t:number = handler.useFrame ? this._currFrame : this._currTime;
             
             if( t >= handler.exeTime)
             {
@@ -74,7 +74,7 @@ class TimerManager
         DebugUtils.stop("TimerManager:");
     }
 
-    private static create(userFrame:boolean, delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
+    private static create(useFrame:boolean, delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
     {
         //参数监测
         if(delay < 0 || repeatCount < 0 || method == null)
@@ -88,7 +88,7 @@ class TimerManager
 
         //创建
         let handler: TimerHandler = ObjectPool.pop("TimerHandler");
-        handler.userFrame = userFrame;
+        handler.useFrame = useFrame;
         handler.repeat = repeatCount == 0;
         handler.repeatCount = repeatCount;
         handler.delay = delay;
@@ -112,7 +112,7 @@ class TimerManager
      * 
     */
 
-    public static doTimer(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
+    public static doTimer(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod?:Function, completeMethodObj?:any):void
     {
         this.create(false, delay, repeatCount, method, methodObj, completeMethod, completeMethodObj);
     }
@@ -121,7 +121,7 @@ class TimerManager
      * @param delay 执行间隔：毫秒
     */
 
-    public static doFrame(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
+    public static doFrame(delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod?:Function, completeMethodObj?:any):void
     {
         this.create(true, delay, repeatCount, method, methodObj, completeMethod, completeMethodObj);
     }
@@ -189,7 +189,7 @@ class TimerHandler
     /**重复执行的次数*/
     public repeatCount: number = 0;
     /**是否使用帧率*/
-    public userFrame: boolean;
+    public useFrame: boolean;
     /**执行时间*/
     public exeTime: number = 0;
     /**处理函数*/
