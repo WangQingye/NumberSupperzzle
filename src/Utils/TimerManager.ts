@@ -36,7 +36,7 @@ class TimerManager
     {
         this._currFrame++;
         this._currTime = egret.getTimer();
-        DebugUtils.start('TimerManager:');
+        //DebugUtils.start('TimerManager:');
 
         for(let i = 0; i < this._count; i++)
         {
@@ -45,9 +45,9 @@ class TimerManager
             
             if( t >= handler.exeTime)
             {
-                DebugUtils.start(handler.method.toString());
+                //DebugUtils.start(handler.method.toString());
                 handler.method.call(handler.methodObj,(this._currTime - handler.lastTime) * this._timeScale);
-                DebugUtils.stop(handler.method.toString());
+                //DebugUtils.stop(handler.method.toString());
                 handler.lastTime = this._currTime;
                 handler.exeTime += handler.delay;
                 if(!handler.repeat)
@@ -71,7 +71,7 @@ class TimerManager
             var handler:TimerHandler = this._delHandlers.pop();
             this.remove(handler.method, handler.methodObj);
         }
-        DebugUtils.stop("TimerManager:");
+        //DebugUtils.stop("TimerManager:");
     }
 
     private static create(useFrame:boolean, delay:number, repeatCount:number, method:Function, methodObj:any, completeMethod:Function, completeMethodObj:any):void
