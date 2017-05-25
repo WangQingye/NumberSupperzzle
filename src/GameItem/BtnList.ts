@@ -83,5 +83,6 @@ class BtnList extends egret.DisplayObjectContainer
         this._moreBtn.visible = false;
         this._retryBtn.visible = false;
         this._homeBtn.visible = false;
+        console.log('123');
     }
 }
